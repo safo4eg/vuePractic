@@ -37,6 +37,19 @@ img {
     text-decoration: line-through;
 }
 
+.product-info h1 {
+    margin-bottom: 0;
+}
+
+.product-info .sale-wrapper {
+    height: 25px;
+}
+
+.product-info .onSale {
+    margin: 0;
+    color: red;
+}
+
 .color-box {
     width: 40px;
     height: 40px;
