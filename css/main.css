@@ -56,6 +56,11 @@ button {
     font-size: 14px;
 }
 
+button:hover {
+    background-color: #0061ab;
+    cursor: pointer;
+}
+
 .disabledButton {
     background-color: #d8d8d8;
 }
@@ -86,4 +91,18 @@ textarea {
 .activeTab {
     color: #16C0B0;
     text-decoration: underline;
+}
+
+/* ... */
+.button-wrapper {
+    display: flex;
+}
+
+#removeToCart {
+    margin-left: 5px;
+    background-color: #ee3a4e;
+}
+
+#removeToCart:hover {
+    background-color: #ce0d22;
 }
