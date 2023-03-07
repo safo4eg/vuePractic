@@ -38,17 +38,19 @@ templates.then(array => {
                         variantQuantity: 0,
                         variantOnSale: false,
                     }
-                ],
-                cart: 0,
+                ]
             }
         },
 
         methods: {
             addToCart() {
-                this.cart += 1;
+                this.$emit(
+                    'add-to-cart',
+                     this.variants[this.selectedVariant].variantId
+                );
             },
             removeToCart() {
-                if(this.cart > 0) this.cart--;
+                this.$emit('remove-to-cart');
             },
             updateProduct(index) {
                 this.selectedVariant = index;
@@ -103,7 +105,18 @@ templates.then(array => {
     let app = new Vue({
         el: '#app',
         data: {
-            premium: false
+            premium: false,
+            cart: []
+        },
+
+        methods: {
+            updateCart(id) {
+                this.cart.push(id);
+            },
+
+            popFromCart() {
+                this.cart.pop();
+            }
         }
     });
 });
