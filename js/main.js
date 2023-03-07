@@ -1,47 +1,21 @@
-// let template =
-//     '<div class="product">' +
-//         '<div class="product-image">' +
-//             '<img :src="image" :alt="altText">' +
-//         '</div>' +
-//         '<div class="product-info">' +
-//             '<h1>{{title}}</h1>' +
-//             '<div class="sale-wrapper">' +
-//                 '<p class="onSale" v-if="onSale">Sale</p>' +
-//             '</div>' +
-//             '<p v-if="inStock">In stock</p>' +
-//             '<p v-else :class="{isNotStock: !inStock}">Out of Stock</p>' +
-//             '<ul>' +
-//             '<li v-for="detail in details">{{detail}}</li>' +
-//             '</ul>' +
-//             '<div class="color-box"' +
-//             'v-for="(variant, index) in variants"' +
-//             ':key="variant.variantId"' +
-//             ':style="{backgroundColor:variant.variantColor}"' +
-//             '@mouseover="updateProduct(index)"' +
-//             '>' +
-//             '</div>' +
-//             '<div class="button-wrapper">' +
-//                 '<button' +
-//                 '@click="addToCart"' +
-//                 ':disabled="!inStock"' +
-//                 ':class="{disabledButton: !inStock}"' +
-//                 '>' +
-//                 'Add to cart' +
-//                 '</button>' +
-//                 '<button id="removeToCart" @click="removeToCart">' +
-//                 'Remove from cart' +
-//                 '</button>' +
-//             '</div>' +
-//             '<div class="cart">' +
-//                 '<p>Товаров в корзине({{cart}})</p>' +
-//             '</div>' +
-//         '</div>' +
-//     '</div>'; // produc
+let template1 = 'templates/product.html';
+let template2 = 'templates/product-details.html';
 
-let template1 = getTemplate('templates/template1.html');
-template1.then(content => {
-    let body = {
-        template: content,
+let templates = getTemplates(template1, template2);
+templates.then(array => {
+    let productTemplate = array[0];
+    let productDetailsTemplate = array[1];
+
+    let productBody = {
+        template: productTemplate,
+
+        props: {
+            premium: {
+                type: Boolean,
+                required: true
+            }
+        },
+
         data() {
             return {
                 product: "Socks",
@@ -96,27 +70,54 @@ template1.then(content => {
 
             onSale() {
                 return this.variants[this.selectedVariant].variantOnSale;
+            },
+
+            shipping() {
+                if(this.premium) {
+                    return 'Free';
+                } else {
+                    return '2.99';
+                }
             }
         }
     }
 
+    let productDetailsBody = {
+        template: productDetailsTemplate,
+        data() {
+            return {
 
-    Vue.component('product', body);
+            }
+        }
+    }
+
+    Vue.component('product', productBody);
+    Vue.component('product-details', productDetailsBody);
     let app = new Vue({
         el: '#app',
+        data: {
+            premium: false
+        }
     });
 });
 
-async function getTemplate(path) {
-    let promise = new Promise((resolve, reject) => {
-        fetch(path).then(
-            response => {
-               if(response.ok) resolve(response.text());
-               else reject('Ошибка');
-            });
-    });
 
-    let result = await promise;
+async function getTemplates(...pathTemplates) {
+    let promises = [];
+
+    for(let template of pathTemplates) {
+        let promise = new Promise((resolve, reject) => {
+            fetch(template).then(
+                response => {
+                    if(response.ok) resolve(response.text());
+                    else reject('Ошибка');
+                });
+        });
+
+        promises.push(promise);
+    }
+
+    let result = await Promise.all(promises);
     return result;
 }
 

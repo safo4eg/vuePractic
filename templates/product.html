@@ -11,11 +11,11 @@
     <p v-if="inStock">In stock</p>
     <p v-else :class="{isNotStock: !inStock}">Out of Stock</p>
 
-    <ul>
-      <li v-for="detail in details">{{detail}}</li>
-    </ul>
+    <product-details></product-details>
 
-    <div class="class-box"
+    <p>Shipping: {{shipping}}</p>
+
+    <div class="color-box"
          v-for="(variant, index) in variants"
          :key="variant.variantId"
          :style="{backgroundColor:variant.variantColor}"
@@ -38,5 +38,6 @@
   <div class="cart">
     <p>Товаров в корзине({{cart}})</p>
   </div>
+
   </div> <!-- product-info -->
 </div> <!-- product -->
