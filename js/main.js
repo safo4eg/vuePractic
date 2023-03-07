@@ -1,10 +1,12 @@
 let template1 = 'templates/product.html';
 let template2 = 'templates/product-details.html';
+let template3 = 'templates/product-review.html';
 
-let templates = getTemplates(template1, template2);
+let templates = getTemplates(template1, template2, template3);
 templates.then(array => {
     let productTemplate = array[0];
     let productDetailsTemplate = array[1];
+    let productReviewTemplate = array[2];
 
     let productBody = {
         template: productTemplate,
@@ -38,7 +40,8 @@ templates.then(array => {
                         variantQuantity: 0,
                         variantOnSale: false,
                     }
-                ]
+                ],
+                reviews: [],
             }
         },
 
@@ -49,11 +52,17 @@ templates.then(array => {
                      this.variants[this.selectedVariant].variantId
                 );
             },
+
             removeToCart() {
                 this.$emit('remove-to-cart');
             },
+
             updateProduct(index) {
                 this.selectedVariant = index;
+            },
+
+            addReview(productReview) {
+                this.reviews.push(productReview);
             }
         },
 
@@ -100,8 +109,41 @@ templates.then(array => {
         }
     }
 
+    let productReviewBody = {
+        template: productReviewTemplate,
+        data() {
+            return {
+                name: null,
+                review: null,
+                rating: null,
+                errors: []
+            }
+        },
+
+        methods: {
+            onSubmit() {
+                if(this.name && this.review && this.rating) {
+                    let productReview = {
+                        name: this.name,
+                        review: this.review,
+                        rating: this.rating
+                    }
+                    this.$emit('review-submitted', productReview)
+                    this.name = null
+                    this.review = null
+                    this.rating = null
+                } else {
+                    if(!this.name) this.errors.push("Name required.")
+                    if(!this.review) this.errors.push("Review required.")
+                    if(!this.rating) this.errors.push("Rating required.")
+                }
+            }
+        }
+    }
+
     Vue.component('product', productBody);
     Vue.component('product-details', productDetailsBody);
+    Vue.component('product-review', productReviewBody);
     let app = new Vue({
         el: '#app',
         data: {

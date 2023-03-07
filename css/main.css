@@ -128,3 +128,8 @@ textarea {
 #removeToCart:hover {
     background-color: #ce0d22;
 }
+
+.radio-wrapper {
+    display: flex;
+
+}
