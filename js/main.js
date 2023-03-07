@@ -84,6 +84,13 @@ templates.then(array => {
 
     let productDetailsBody = {
         template: productDetailsTemplate,
+        props: {
+            details: {
+                type: Array,
+                required: true
+            }
+        },
+
         data() {
             return {
 

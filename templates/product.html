@@ -11,7 +11,7 @@
     <p v-if="inStock">In stock</p>
     <p v-else :class="{isNotStock: !inStock}">Out of Stock</p>
 
-    <product-details></product-details>
+    <product-details :details="details"></product-details>
 
     <p>Shipping: {{shipping}}</p>
 
