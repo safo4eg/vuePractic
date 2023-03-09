@@ -68,7 +68,7 @@ templates.then(array => {
 
         mounted() {
             eventBus.$on('review-submitted', productReview => {
-                this.reviews.push(productReview)
+                this.reviews.push(productReview);
             });
         },
 
