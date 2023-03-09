@@ -1,0 +1,19 @@
+<div>
+    <span class="tab" v-for="(tab, index) in tabs" :key="index" @click="selectedTab = tab" :class="{ activeTab: selectedTab === tab }">{{ tab }}</span>
+    <div v-show="selectedTab === 'Reviews'">
+        <p v-if="!reviews.length">There are no reviews yet.</p>
+        <ul>
+            <li v-for="review in reviews">
+                <p>{{ review.name }}</p>
+                <p>Rating: {{ review.rating }}</p>
+                <p>{{ review.review }}</p>
+                <p>{{review.isRec}}</p>
+            </li>
+        </ul>
+    </div>
+
+    <div v-show="selectedTab === 'Make a Review'">
+        <product-review></product-review>
+    </div>
+
+</div>

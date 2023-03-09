@@ -1,12 +1,16 @@
 let template1 = 'templates/product.html';
 let template2 = 'templates/product-details.html';
 let template3 = 'templates/product-review.html';
+let template4 = 'templates/product-tabs.html';
+let templates = getTemplates(template1, template2, template3, template4);
 
-let templates = getTemplates(template1, template2, template3);
 templates.then(array => {
     let productTemplate = array[0];
     let productDetailsTemplate = array[1];
     let productReviewTemplate = array[2];
+    let productTabsTemplate = array[3];
+
+    let eventBus = new Vue();
 
     let productBody = {
         template: productTemplate,
@@ -60,10 +64,12 @@ templates.then(array => {
             updateProduct(index) {
                 this.selectedVariant = index;
             },
+        },
 
-            addReview(productReview) {
-                this.reviews.push(productReview);
-            }
+        mounted() {
+            eventBus.$on('review-submitted', productReview => {
+                this.reviews.push(productReview)
+            });
         },
 
         computed: {
@@ -130,7 +136,7 @@ templates.then(array => {
                         rating: this.rating,
                         isRec: this.isRec === 'yes'? 'Поделился': 'Не поделился',
                     }
-                    this.$emit('review-submitted', productReview)
+                    eventBus.$emit('review-submitted', productReview)
                     this.name = null
                     this.review = null
                     this.rating = null
@@ -144,9 +150,30 @@ templates.then(array => {
         }
     }
 
+    let productTabsBody = {
+        template: productTabsTemplate,
+
+        props: {
+            reviews: {
+                type: Array,
+                required: false
+            }
+        },
+
+        data() {
+            return {
+                tabs: ['Reviews', 'Make a Review'],
+                selectedTab: 'Reviews '
+            }
+        },
+
+    }
+
     Vue.component('product', productBody);
     Vue.component('product-details', productDetailsBody);
     Vue.component('product-review', productReviewBody);
+    Vue.component('product-tabs', productTabsBody);
+
     let app = new Vue({
         el: '#app',
         data: {
